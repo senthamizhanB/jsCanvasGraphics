@@ -14,7 +14,7 @@ image.addEventListener("load", function () {
   ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
   const scannedImage = ctx.getImageData(0, 0, canvas.width, canvas.height);
   const scannedData = scannedImage.data;
-
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
   //   console.log(scannedImage);
   //   for (let i = 0; i < scannedData.length; i += 4) {
   //     const total = scannedData[i] + scannedData[i + 1] + scannedData[i + 2];
