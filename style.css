@@ -1,0 +1,41 @@
+ * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        background: black;
+        overflow: hidden;
+    }
+
+    div#links {
+        z-index: 1;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%,-50%);
+        background: transparent;
+    }
+
+    a {
+        color: pink;
+    }
+    input{
+        background: transparent;
+        margin:8px;
+        padding: 8px;
+        border-radius: 8px;
+        color:red;
+        font-size: 20px;
+        font-family: fantasy;
+        background: black;
+    }
+    input:hover{
+        color: yellow;
+        padding: 12px;
+    }
+
+    canvas {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        /* z-index: -1; */
+    }
