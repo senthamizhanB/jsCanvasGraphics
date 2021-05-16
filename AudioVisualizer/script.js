@@ -5,19 +5,34 @@ const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
+var container = document.getElementById("container");
 var audioFile = document.getElementById("audiofile"),
   audioElement;
 var audioElement = document.getElementById("audio");
-var audioCtx ;
+var audioCtx;
 var analyser;
-var data;
+var data ;
 var source;
 
-var offsetX=100;
+var offsetX = 100;
 
+container.addEventListener("click", function () {
+  if (!source) {
+    audioElement.play()
+    init();
+    animationLoop();
+  }
+});
+audioElement.addEventListener("play", function () {
+  if (!source) {
+    //   audioElement.play();
+    init();
+    animationLoop();
+  }
+});
 
 function animationLoop() {
-  audioElement.play();
+  // audioElement.play();
 
   requestAnimationFrame(animationLoop);
 
@@ -36,11 +51,10 @@ function init() {
 }
 
 function draw() {
-  
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   data.forEach((value, i) => {
     ctx.save();
-    ctx.translate(canvas.width / 2+offsetX, canvas.height / 2);
+    ctx.translate(canvas.width / 2 + offsetX, canvas.height / 2);
     ctx.rotate(i + Math.PI / data.length);
     let barheigth = value;
     let barwidth = 10;
@@ -53,17 +67,20 @@ function draw() {
   });
 }
 
-
 audioFile.addEventListener("change", function () {
-  if(!source){
-    init();
-  }
   var file = this.files;
 
   audioElement = document.getElementById("audio");
 
   audioElement.src = URL.createObjectURL(file[0]);
-  
+
+    if (!source) {
+      //   audioElement.play();
+      init();
+    }
+
+  audioElement.play()
+
   animationLoop();
 });
 
@@ -71,6 +88,3 @@ window.addEventListener("resize", function () {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 });
-
-
-var count=1;
