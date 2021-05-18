@@ -38,6 +38,15 @@ class Particle {
     this.baseX = this.x;
     this.baseY = this.y;
     this.density = Math.random() + 1;
+    this.color ="white";
+    this.baseColor =
+      "rgb(" +
+      Math.random() * 255 +
+      "," +
+      Math.random() * 255 +
+      "," +
+      Math.random() * 255 +
+      ",1)";
   }
   update() {
     this.dx = this.x - mouse.x;
@@ -61,9 +70,15 @@ class Particle {
         this.y += dy / 10;
       }
     }
+    if(this.baseX==this.x&&this.baseY==this.y){
+      this.color="white";
+    }
+    else{
+this.color =this.baseColor;
+    }
   }
   draw() {
-    ctx.fillStyle = "white";
+    ctx.fillStyle = this.color;
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
     ctx.closePath();
@@ -84,44 +99,48 @@ function init() {
 }
 
 function animate() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  for (let i = 0; i < particles.length; i++) {
-    particles[i].update();
-    particles[i].draw();
-  }
+  // ctx.clearRect(0, 0, canvas.width, canvas.height);
+ 
   //   connect();
   requestAnimationFrame(animate);
 }
 
 // randomParticles();
 init();
-animate();
+// animate();
 
-function connect() {
-  for (let i = 0; i < particles.length; i++) {
-    for (let j = i; j < particles.length; j++) {
-      let dx = particles[i].x - particles[j].x;
-      let dy = particles[i].y - particles[j].y;
-      let distance = Math.sqrt(dx * dx + dy * dy);
-      if (distance < 100) {
-        ctx.strokeStyle = "white";
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(particles[i].x, particles[i].y);
-        ctx.lineTo(particles[j].x, particles[j].y);
-        ctx.stroke();
-      }
-    }
-  }
+function particlesRender(){
+ for (let i = 0; i < particles.length; i++) {
+   particles[i].update();
+   particles[i].draw();
+ }
 }
 
-function randomParticles() {
-  for (let i = 0; i < numerOfParticles; i++) {
-    particles.push(
-      new Particle(Math.random() * canvas.width, Math.random() * canvas.height)
-    );
-  }
-}
+// function connect() {
+//   for (let i = 0; i < particles.length; i++) {
+//     for (let j = i; j < particles.length; j++) {
+//       let dx = particles[i].x - particles[j].x;
+//       let dy = particles[i].y - particles[j].y;
+//       let distance = Math.sqrt(dx * dx + dy * dy);
+//       if (distance < 100) {
+//         ctx.strokeStyle = "white";
+//         ctx.lineWidth = 2;
+//         ctx.beginPath();
+//         ctx.moveTo(particles[i].x, particles[i].y);
+//         ctx.lineTo(particles[j].x, particles[j].y);
+//         ctx.stroke();
+//       }
+//     }
+//   }
+// }
+
+// function randomParticles() {
+//   for (let i = 0; i < numerOfParticles; i++) {
+//     particles.push(
+//       new Particle(Math.random() * canvas.width, Math.random() * canvas.height)
+//     );
+//   }
+// }
 
 
 window.addEventListener("resize", function () {

@@ -40,5 +40,12 @@
         position: absolute;
         top: 0;
         bottom: 0;
-        /* z-index: -1; */
+        /* z-index: 0; */
+    }
+    p{
+        color:white;
+        /* border: 2px solid green; */
+        position: absolute;
+        right:0;
+        bottom: 0;
     }
