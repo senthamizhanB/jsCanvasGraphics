@@ -11,7 +11,7 @@ var particles = [];
 // var adjustY = 10;
 // var scaleX = 2;
 // var scaleY = 2;
-var pixelGap=3;
+var pixelGap = 5;
 
 const mouse = {
   x: null,
@@ -34,13 +34,14 @@ image.addEventListener("load", function () {
   const pixelData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
   class Particle {
-    constructor(x, y) {
+    constructor(x, y,color) {
       this.x = x;
       this.y = y;
       this.size = 2;
       this.baseX = this.x;
       this.baseY = this.y;
       this.density = Math.random() + 1;
+      this.fillStyle=color;
     }
     update() {
       this.dx = this.x - mouse.x;
@@ -56,17 +57,17 @@ image.addEventListener("load", function () {
       } else {
         if (this.x != this.baseX) {
           let dx = this.baseX - this.x;
-          this.x += dx /10;
+          this.x += dx / 10;
         }
 
         if (this.y != this.baseY) {
           let dy = this.baseY - this.y;
-          this.y += dy /10;
+          this.y += dy / 10;
         }
       }
     }
     draw() {
-      ctx.fillStyle = "white";
+      ctx.fillStyle = this.fillStyle;
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
       ctx.closePath();
@@ -84,7 +85,7 @@ image.addEventListener("load", function () {
     requestAnimationFrame(animate);
   }
 
-    // console.log(pixelData);
+  // console.log(pixelData);
 
   let mappedImage = [];
   for (let y = 0; y < pixelData.height; y++) {
@@ -93,10 +94,10 @@ image.addEventListener("load", function () {
       let red = pixelData.data[y * 4 * pixelData.width + x * 4];
       let green = pixelData.data[y * 4 * pixelData.width + x * 4 + 1];
       let blue = pixelData.data[y * 4 * pixelData.width + x * 4 + 2];
-      let brightness = (red + blue + green) / 3;
+      let color="rgba("+red+","+green+","+blue+")";
       //   let brightness = calculateRelativeBrightness(red, green, blue);
       //   console.log(red);
-      let cell = [(cellBrightness = brightness)];
+      let cell = [(cellColor = color)];
       row.push(cell);
     }
     mappedImage.push(row);
@@ -108,10 +109,10 @@ image.addEventListener("load", function () {
   init();
   animate();
   function init() {
-    for (let y = 0; y < pixelData.height; y+=pixelGap) {
-      for (let x = 0; x < pixelData.width; x+=pixelGap) {
-        if (mappedImage[y][x][0] > 100) {
-          particles.push(new Particle(x, y));
+    for (let y = 0; y < pixelData.height; y += pixelGap) {
+      for (let x = 0; x < pixelData.width; x += pixelGap) {
+        if (mappedImage[y][x][0]) {
+          particles.push(new Particle(x, y,mappedImage[y][x][0]));
         }
       }
     }

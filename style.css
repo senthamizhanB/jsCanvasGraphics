@@ -2,17 +2,20 @@
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        background: black;
         overflow: hidden;
     }
 
     div#links {
+        /* border: 2px solid green; */
         z-index: 1;
         position: absolute;
-        left: 50%;
+        display: flex;
+        width: 100%;
+        /* left: 50%; */
         top: 50%;
-        transform: translate(-50%,-50%);
+        transform: translate(0,-50%);
         background: transparent;
+        justify-content: center;
     }
 
     a {

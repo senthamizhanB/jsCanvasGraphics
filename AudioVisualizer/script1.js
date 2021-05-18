@@ -11,38 +11,43 @@ var audioFile = document.getElementById("audiofile"),
 var audioElement = document.getElementById("audio");
 var audioCtx;
 var analyser;
-var data ;
+var data;
 var source;
 
 var offsetX = 100;
 
+container.addEventListener("click", function () {
+  if (!source) {
+      audioElement.play();
+    init();
+    animationLoop();
+  }
+});
+audioElement.addEventListener("play", function () {
+  if (!source) {
+    //   audioElement.play();
+    init();
+    animationLoop();
+  }
+});
 
 function animationLoop() {
-  // audioElement.play();
-  audioRender()
-  mouseTrailRender()
-  requestAnimationFrame(animationLoop);
-}
+//   audioElement.play();
 
-function audioRender(){
-  update();
+  requestAnimationFrame(animationLoop);
+
+  analyser.getByteFrequencyData(data);
   draw();
 }
-
 
 function init() {
   audioCtx = new AudioContext();
   analyser = audioCtx.createAnalyser();
-  analyser.fftSize = 2048;
+  analyser.fftSize = 128;
   source = audioCtx.createMediaElementSource(audioElement);
   source.connect(analyser);
   source.connect(audioCtx.destination);
   data = new Uint8Array(analyser.frequencyBinCount);
-}
-
-function update(){
-  analyser.getByteFrequencyData(data);
-
 }
 
 function draw() {
@@ -50,7 +55,7 @@ function draw() {
   data.forEach((value, i) => {
     ctx.save();
     ctx.translate(canvas.width / 2 + offsetX, canvas.height / 2);
-    ctx.rotate(i + Math.PI / data.length);
+    ctx.rotate(i *data.length);
     let barheigth = value;
     let barwidth = 10;
     let hue = i * 2;
@@ -62,33 +67,16 @@ function draw() {
   });
 }
 
+audioFile.addEventListener("change", function () {
+  var file = this.files;
 
+  audioElement = document.getElementById("audio");
 
-// audioElement.addEventListener("play", function () {
-//   if (!source) {
-//     //   audioElement.play();
-//     init();
-//     animationLoop();
-//   }
-// });
+  audioElement.src = URL.createObjectURL(file[0]);
+  audioElement.play();
 
-// audioFile.addEventListener("change", function () {
-//   var file = this.files;
-
-//   audioElement = document.getElementById("audio");
-
-//   audioElement.src = URL.createObjectURL(file[0]);
-
-//     if (!source) {
-//       //   audioElement.play();
-//       init();
-//     }
-    // audioElement.load();
-
-//   audioElement.play()
-
-//   animationLoop();
-// });
+  animationLoop();
+});
 
 window.addEventListener("resize", function () {
   canvas.width = window.innerWidth;

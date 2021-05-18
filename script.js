@@ -6,17 +6,17 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 var particles = [];
-var numerOfParticles = 500;
+var numerOfParticles =500;
 var adjustX = -60;
 var adjustY = 10;
 var scaleX = 2;
 var scaleY = 2;
-var connectDistance=85;
+var connectDistance=80;
 
 const mouse = {
   x: null,
   y: null,
-  radius: 100,
+  radius: 120,
 };
 
 window.addEventListener("mousemove", function (event) {
@@ -39,7 +39,15 @@ class Particle {
     this.baseX = this.x;
     this.baseY = this.y;
     this.density = Math.random() + 1;
-    this.fillStyle
+    // this.fillStyle =
+    //   "rgb(" +
+    //   Math.random() * 255 +
+    //   "," +
+    //   Math.random() * 255 +
+    //   "," +
+    //   Math.random() * 255 +
+    //   ",1)";
+    this.fillStyle="rgba(255,255,255,0.5)"
   }
   update() {
     this.dx = this.x - mouse.x;
@@ -65,7 +73,7 @@ class Particle {
     }
   }
   draw() {
-    ctx.fillStyle ="rgba(255,0,0,0.2)";
+    ctx.fillStyle ="rgba(255,0,0,0.6)";
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
     ctx.closePath();
@@ -86,28 +94,33 @@ function init() {
 }
 
 function animate() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  for (let i = 0; i < particles.length; i++) {
-    particles[i].update();
-    particles[i].draw();
-  }
-    connect();
+   ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  particlesRender()
   requestAnimationFrame(animate);
+}
+
+function particlesRender(){
+   for (let i = 0; i < particles.length; i++) {
+     particles[i].update();
+     particles[i].draw();
+   }
+   connectParticles();
 }
 
 randomParticles();
 // init();
-animate();
+// animate();
 
-function connect() {
+function connectParticles() {
   for (let i = 0; i < particles.length; i++) {
-    for (let j = i; j < particles.length; j++) {
+    for (let j = i+1; j < particles.length; j++) {
       let dx = particles[i].x - particles[j].x;
       let dy = particles[i].y - particles[j].y;
       let distance = Math.sqrt(dx * dx + dy * dy);
       if (distance < connectDistance) {
-        ctx.strokeStyle = "rgba(255,255,255,0.2)";
-        ctx.lineWidth = 2;
+        ctx.strokeStyle = particles[i].fillStyle;
+        ctx.lineWidth = 1.2;
         ctx.beginPath();
         ctx.moveTo(particles[i].x, particles[i].y);
         ctx.lineTo(particles[j].x, particles[j].y);
@@ -124,9 +137,3 @@ function randomParticles() {
     );
   }
 }
-
-
-window.addEventListener("resize", function () {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-});
