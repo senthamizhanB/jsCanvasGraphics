@@ -40,6 +40,7 @@
         position: absolute;
         top: 0;
         bottom: 0;
+        filter: blur(1px);
         /* z-index: 0; */
     }
     p{

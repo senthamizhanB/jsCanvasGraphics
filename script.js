@@ -6,12 +6,12 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 var particles = [];
-var numerOfParticles =500;
+var numerOfParticles =400;
 var adjustX = -60;
 var adjustY = 10;
 var scaleX = 2;
 var scaleY = 2;
-var connectDistance=80;
+var connectDistance=85 ;
 
 const mouse = {
   x: null,
@@ -35,10 +35,12 @@ class Particle {
   constructor(x, y) {
     this.x = x;
     this.y = y;
-    this.size = 4;
+    this.size = 2;
     this.baseX = this.x;
     this.baseY = this.y;
     this.density = Math.random() + 1;
+    this.velocityX=Math.random()*2-1+0.1;
+    this.velocityY=Math.random()*2-1+0.1;
     // this.fillStyle =
     //   "rgb(" +
     //   Math.random() * 255 +
@@ -47,9 +49,11 @@ class Particle {
     //   "," +
     //   Math.random() * 255 +
     //   ",1)";
-    this.fillStyle="rgba(255,255,255,0.5)"
+    // this.fillStyle="rgba(255,255,255,0.5)"
   }
   update() {
+    this.x+=this.velocityX;
+    this.y+=this.velocityY;
     this.dx = this.x - mouse.x;
     this.dy = this.y - mouse.y;
     this.distance = Math.sqrt(this.dx * this.dx + this.dy * this.dy);
@@ -60,18 +64,26 @@ class Particle {
     if (this.distance < mouse.radius) {
       this.x += this.directionX * this.density;
       this.y += this.directionY * this.density;
-    } else {
-      if (this.x != this.baseX) {
-        let dx = this.baseX - this.x;
-        this.x += dx / 10;
-      }
+    } 
+    // else {
+      // if (this.x != this.baseX) {
+      //   let dx = this.baseX - this.x;
+      //   this.x += dx / 10;
+      // }
 
-      if (this.y != this.baseY) {
-        let dy = this.baseY - this.y;
-        this.y += dy / 10;
-      }
+      // if (this.y != this.baseY) {
+      //   let dy = this.baseY - this.y;
+      //   this.y += dy / 10;
+      // }
+
+    if(this.x<=0||this.x>=canvas.width){
+      this.velocityX=-this.velocityX;
     }
-  }
+    if(this.y<=0||this.y>=canvas.height){
+      this.velocityY=-this.velocityY;
+    }
+    }
+  
   draw() {
     ctx.fillStyle ="rgba(255,0,0,0.6)";
     ctx.beginPath();
@@ -119,7 +131,8 @@ function connectParticles() {
       let dy = particles[i].y - particles[j].y;
       let distance = Math.sqrt(dx * dx + dy * dy);
       if (distance < connectDistance) {
-        ctx.strokeStyle = particles[i].fillStyle;
+        // ctx.strokeStyle = particles[i].fillStyle;
+        ctx.strokeStyle="rgba(255,255,255,"+(1-distance/connectDistance)+")";
         ctx.lineWidth = 1.2;
         ctx.beginPath();
         ctx.moveTo(particles[i].x, particles[i].y);
